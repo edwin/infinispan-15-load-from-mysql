@@ -45,6 +45,19 @@ public class InfinispanInitializer implements CommandLineRunner {
                         "      <indexed-entity>proto.Employee</indexed-entity>\n" +
                         "    </indexed-entities>" +
                         "\t</indexing>\n" +
+                        "  <persistence>" +
+                        "    <table-jdbc-store xmlns=\"urn:infinispan:config:store:sql:15.0\"\n" +
+                        "                      dialect=\"MYSQL\"\n" +
+                        "                      shared=\"true\"\n" +
+                        "                      table-name=\"t_employee_cache\">\n" +
+                        "     <connection-pool connection-url=\"jdbc:mysql://localhost:3306/test_db\"\n" +
+                        "                      username=\"root\"\n" +
+                        "                      password=\"password\"\n" +
+                        "                      driver=\"com.mysql.cj.jdbc.Driver\"/>" +
+                        "      <write-behind modification-queue-size=\"2048\"\n" +
+                        "                    fail-silently=\"true\"/>\n" +
+                        "    </table-jdbc-store>\n" +
+                        "  </persistence>" +
                         "</distributed-cache>"));
     }
 }
