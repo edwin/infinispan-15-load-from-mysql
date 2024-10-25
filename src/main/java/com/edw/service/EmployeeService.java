@@ -1,8 +1,6 @@
 package com.edw.service;
 
 import com.edw.model.Employee;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +27,7 @@ public class EmployeeService {
         this.remoteCacheManager = remoteCacheManager;
     }
 
-    public List<Employee> getUsers() throws Exception {
+    public List<Employee> get() throws Exception {
         final RemoteCache cache = remoteCacheManager.getCache("employee");
 
         return (List<Employee>) cache.keySet().stream()
@@ -44,7 +42,7 @@ public class EmployeeService {
         cache.put(employee.getId(), employee);
     }
 
-    public Employee getEmployee(Long id) throws Exception {
+    public Employee get(Long id) throws Exception {
         final RemoteCache cache = remoteCacheManager.getCache("employee");
         return (Employee) cache.get(id);
     }

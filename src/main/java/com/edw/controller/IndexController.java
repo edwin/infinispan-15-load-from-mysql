@@ -36,13 +36,13 @@ public class IndexController {
     }
 
     @GetMapping(path = "/employee/{id}")
-    public Employee getEmployee(@PathVariable Long id) throws Exception {
-        return employeeService.getEmployee(id);
+    public Employee get(@PathVariable Long id) throws Exception {
+        return employeeService.get(id);
     }
 
     @GetMapping(path = "/employee")
-    public List<Employee> getAllEmployee() throws Exception {
-        return employeeService.getUsers();
+    public List<Employee> get() throws Exception {
+        return employeeService.get();
     }
 
     @PostMapping(path = "/employee")
