@@ -67,3 +67,60 @@ create table test_db.t_employee
     lastname  varchar(100) null
 );
 ```
+
+## How to Test
+```
+$  curl -kv http://localhost:8080/employee -X POST \ 
+    -d '{"firstname":"Ryoko", "lastname":"Hirosue", "id":29,"gender":"M"}' \ 
+    -H "Content-Type: application/json"
+Note: Unnecessary use of -X or --request, POST is already inferred.
+*   Trying [::1]:8080...
+* Connected to localhost (::1) port 8080
+> POST /employee HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.4.0
+> Accept: */*
+> Content-Type: application/json
+> Content-Length: 65
+>
+< HTTP/1.1 201
+< Content-Length: 0
+< Date: Fri, 25 Oct 2024 02:51:24 GMT
+<
+* Connection #0 to host localhost left intact
+
+
+$ curl -kv http://localhost:8080/employee/29
+*   Trying [::1]:8080...
+* Connected to localhost (::1) port 8080
+> GET /employee/29 HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.4.0
+> Accept: */*
+>
+< HTTP/1.1 200
+< Content-Type: application/json
+< Transfer-Encoding: chunked
+< Date: Fri, 25 Oct 2024 06:41:33 GMT
+<
+* Connection #0 to host localhost left intact
+{"gender":"F","id":29,"firstname":"Ryoko","lastname":"Hirosue"}        
+
+
+$ curl -kv http://localhost:8080/employee
+*   Trying [::1]:8080...
+* Connected to localhost (::1) port 8080
+> GET /employee HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.4.0
+> Accept: */*
+>
+< HTTP/1.1 200
+< Content-Type: application/json
+< Transfer-Encoding: chunked
+< Date: Fri, 25 Oct 2024 02:51:42 GMT
+<
+* Connection #0 to host localhost left intact
+[{"gender":"M","id":1,"firstname":"random","lastname":"name"},{"gender":"M","id":6,"firstname":"gabriel","lastname":"batistuta"},{"gender":"M","id":3,"firstname":"nama","lastname":"satu"},{"gender":"F","id":29,"firstname":"Ryoko","lastname":"Hirosue"},{"gender":"F","id":2,"firstname":"some","lastname":"random"},{"gender":"F","id":11,"firstname":"miss bloody","lastname":"valentine"}] 
+
+```
