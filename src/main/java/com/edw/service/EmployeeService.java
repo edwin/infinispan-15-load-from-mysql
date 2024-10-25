@@ -43,4 +43,9 @@ public class EmployeeService {
         final RemoteCache cache = remoteCacheManager.getCache("employee");
         cache.put(employee.getId(), employee);
     }
+
+    public Employee getEmployee(Long id) throws Exception {
+        final RemoteCache cache = remoteCacheManager.getCache("employee");
+        return (Employee) cache.get(id);
+    }
 }

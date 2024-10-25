@@ -5,10 +5,7 @@ import com.edw.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +33,11 @@ public class IndexController {
         return new HashMap(){{
             put("hello", "world");
         }};
+    }
+
+    @GetMapping(path = "/employee/{id}")
+    public Employee getEmployee(@PathVariable Long id) throws Exception {
+        return employeeService.getEmployee(id);
     }
 
     @GetMapping(path = "/employee")
