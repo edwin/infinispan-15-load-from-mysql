@@ -36,28 +36,31 @@ public class InfinispanInitializer implements CommandLineRunner {
                 .getResource("proto/Employee.proto").toURI());
         String protoBufCacheName = ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME;
         cacheManager.getCache(protoBufCacheName).put("Employee.proto", Files.readString(proto));
-        cacheManager.administration().createCache("employee",
-                new XMLStringConfiguration("<distributed-cache name=\"employee\" mode=\"ASYNC\" statistics=\"true\">\n" +
-                        "\t<encoding media-type=\"application/x-protostream\" />\n" +
+        cacheManager.administration().getOrCreateCache("employee",
+                new XMLStringConfiguration("<replicated-cache name=\"employee\" statistics=\"true\">\n" +
+                        " <encoding media-type=\"application/x-protostream\"/> " +
                         "\t<indexing enabled=\"true\"\n" +
                         "            storage=\"local-heap\">" +
                         "    <indexed-entities>\n" +
                         "      <indexed-entity>proto.Employee</indexed-entity>\n" +
                         "    </indexed-entities>" +
                         "\t</indexing>\n" +
-                        "  <persistence>" +
+                        "<persistence>" +
                         "    <table-jdbc-store xmlns=\"urn:infinispan:config:store:sql:15.0\"\n" +
                         "                      dialect=\"MYSQL\"\n" +
                         "                      shared=\"true\"\n" +
-                        "                      table-name=\"t_employee_cache\">\n" +
+                        "                      table-name=\"t_employee\">\n" +
                         "     <connection-pool connection-url=\"jdbc:mysql://localhost:3306/test_db\"\n" +
                         "                      username=\"root\"\n" +
                         "                      password=\"password\"\n" +
                         "                      driver=\"com.mysql.cj.jdbc.Driver\"/>" +
+                        "   <schema message-name=\"Employee\"\n" +
+                        "              package=\"proto\"" +
+                        "               embedded-key=\"true\"/>" +
                         "      <write-behind modification-queue-size=\"2048\"\n" +
                         "                    fail-silently=\"true\"/>\n" +
                         "    </table-jdbc-store>\n" +
                         "  </persistence>" +
-                        "</distributed-cache>"));
+                        "</replicated-cache>"));
     }
 }

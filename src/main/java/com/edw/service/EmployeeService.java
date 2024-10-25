@@ -1,15 +1,15 @@
 package com.edw.service;
 
 import com.edw.model.Employee;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
-import org.infinispan.client.hotrod.Search;
-import org.infinispan.query.dsl.Query;
-import org.infinispan.query.dsl.QueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <pre>
@@ -29,12 +29,18 @@ public class EmployeeService {
         this.remoteCacheManager = remoteCacheManager;
     }
 
-    public List<Employee> getUsers() {
+    public List<Employee> getUsers() throws Exception {
         final RemoteCache cache = remoteCacheManager.getCache("employee");
-        QueryFactory queryFactory = Search.getQueryFactory(cache);
-        Query<Employee> query = queryFactory.create("FROM proto.Employee order by id ASC");
 
-        // execute the query
-        return query.execute().list();
+        return (List<Employee>) cache.keySet().stream()
+                .map(key -> {
+                    return cache.get(key);
+                })
+                .collect(Collectors.toList());
+    }
+
+    public void save(Employee employee) throws Exception {
+        final RemoteCache cache = remoteCacheManager.getCache("employee");
+        cache.put(employee.getId(), employee);
     }
 }
